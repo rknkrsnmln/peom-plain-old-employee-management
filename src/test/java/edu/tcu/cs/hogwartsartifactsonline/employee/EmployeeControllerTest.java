@@ -1,7 +1,7 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact;
+package edu.tcu.cs.hogwartsartifactsonline.employee;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.EmployeeDto;
+import edu.tcu.cs.hogwartsartifactsonline.employee.dto.EmployeeDto;
 import edu.tcu.cs.hogwartsartifactsonline.system.StatusCode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

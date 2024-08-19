@@ -1,4 +1,4 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact;
+package edu.tcu.cs.hogwartsartifactsonline.employee;
 
 public class EmployeeNotFoundException extends RuntimeException{
     public EmployeeNotFoundException(String id) {

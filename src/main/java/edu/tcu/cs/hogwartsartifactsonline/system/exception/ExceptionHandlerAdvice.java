@@ -1,6 +1,6 @@
 package edu.tcu.cs.hogwartsartifactsonline.system.exception;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.EmployeeNotFoundException;
+import edu.tcu.cs.hogwartsartifactsonline.employee.EmployeeNotFoundException;
 import edu.tcu.cs.hogwartsartifactsonline.system.Result;
 import edu.tcu.cs.hogwartsartifactsonline.system.StatusCode;
 import org.springframework.http.HttpStatus;

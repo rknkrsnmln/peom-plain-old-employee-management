@@ -1,4 +1,4 @@
-package edu.tcu.cs.hogwartsartifactsonline.wizard;
+package edu.tcu.cs.hogwartsartifactsonline.manager;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

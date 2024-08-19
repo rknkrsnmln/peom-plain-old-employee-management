@@ -1,7 +1,7 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact;
+package edu.tcu.cs.hogwartsartifactsonline.employee;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.utils.IdWorker;
-import edu.tcu.cs.hogwartsartifactsonline.wizard.Manager;
+import edu.tcu.cs.hogwartsartifactsonline.employee.utils.IdWorker;
+import edu.tcu.cs.hogwartsartifactsonline.manager.Manager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
