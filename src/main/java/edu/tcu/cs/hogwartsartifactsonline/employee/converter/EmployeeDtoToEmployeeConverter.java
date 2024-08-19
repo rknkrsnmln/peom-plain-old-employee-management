@@ -1,7 +1,7 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact.converter;
+package edu.tcu.cs.hogwartsartifactsonline.employee.converter;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.Employee;
-import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.EmployeeDto;
+import edu.tcu.cs.hogwartsartifactsonline.employee.Employee;
+import edu.tcu.cs.hogwartsartifactsonline.employee.dto.EmployeeDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

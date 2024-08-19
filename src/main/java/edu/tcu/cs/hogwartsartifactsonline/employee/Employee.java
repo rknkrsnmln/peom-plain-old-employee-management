@@ -1,6 +1,6 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact;
+package edu.tcu.cs.hogwartsartifactsonline.employee;
 
-import edu.tcu.cs.hogwartsartifactsonline.wizard.Manager;
+import edu.tcu.cs.hogwartsartifactsonline.manager.Manager;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

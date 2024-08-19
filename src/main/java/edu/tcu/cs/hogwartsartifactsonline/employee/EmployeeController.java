@@ -1,8 +1,8 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact;
+package edu.tcu.cs.hogwartsartifactsonline.employee;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.converter.EmployeeDtoToEmployeeConverter;
-import edu.tcu.cs.hogwartsartifactsonline.artifact.converter.EmployeeToEmployeeDtoConverter;
-import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.EmployeeDto;
+import edu.tcu.cs.hogwartsartifactsonline.employee.converter.EmployeeDtoToEmployeeConverter;
+import edu.tcu.cs.hogwartsartifactsonline.employee.converter.EmployeeToEmployeeDtoConverter;
+import edu.tcu.cs.hogwartsartifactsonline.employee.dto.EmployeeDto;
 import edu.tcu.cs.hogwartsartifactsonline.system.Result;
 import edu.tcu.cs.hogwartsartifactsonline.system.StatusCode;
 import jakarta.validation.Valid;

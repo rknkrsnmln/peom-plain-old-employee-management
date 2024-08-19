@@ -1,6 +1,6 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact.dto;
+package edu.tcu.cs.hogwartsartifactsonline.employee.dto;
 
-import edu.tcu.cs.hogwartsartifactsonline.wizard.dto.ManagerDto;
+import edu.tcu.cs.hogwartsartifactsonline.manager.dto.ManagerDto;
 import jakarta.validation.constraints.NotEmpty;
 
 public record EmployeeDto(String id,

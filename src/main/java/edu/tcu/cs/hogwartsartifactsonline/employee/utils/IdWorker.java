@@ -1,4 +1,4 @@
-package edu.tcu.cs.hogwartsartifactsonline.artifact.utils;
+package edu.tcu.cs.hogwartsartifactsonline.employee.utils;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;

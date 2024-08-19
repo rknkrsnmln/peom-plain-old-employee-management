@@ -1,9 +1,9 @@
 package edu.tcu.cs.hogwartsartifactsonline.system;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.Employee;
-import edu.tcu.cs.hogwartsartifactsonline.artifact.EmployeeRepository;
-import edu.tcu.cs.hogwartsartifactsonline.wizard.Manager;
-import edu.tcu.cs.hogwartsartifactsonline.wizard.ManagerRepository;
+import edu.tcu.cs.hogwartsartifactsonline.employee.Employee;
+import edu.tcu.cs.hogwartsartifactsonline.employee.EmployeeRepository;
+import edu.tcu.cs.hogwartsartifactsonline.manager.Manager;
+import edu.tcu.cs.hogwartsartifactsonline.manager.ManagerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
