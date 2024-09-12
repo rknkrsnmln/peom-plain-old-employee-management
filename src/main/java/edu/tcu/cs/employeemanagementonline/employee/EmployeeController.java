@@ -47,6 +47,7 @@ public class EmployeeController {
     @PostMapping
     public Result addEmployees(@Valid @RequestBody EmployeeDto employeeDto){
         Employee newEmployee = this.employeeDtoToEmployeeConverter.convert(employeeDto);
+        assert newEmployee != null;
         Employee savedEmployee = this.employeeService.save(newEmployee);
         EmployeeDto savedEmployeeDto = this.employeeToEmployeeDtoConverter.convert(savedEmployee);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedEmployeeDto);

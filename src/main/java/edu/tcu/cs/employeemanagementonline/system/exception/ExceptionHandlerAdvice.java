@@ -1,6 +1,7 @@
 package edu.tcu.cs.employeemanagementonline.system.exception;
 
 import edu.tcu.cs.employeemanagementonline.employee.EmployeeNotFoundException;
+import edu.tcu.cs.employeemanagementonline.manager.ManagerNotFoundException;
 import edu.tcu.cs.employeemanagementonline.system.Result;
 import edu.tcu.cs.employeemanagementonline.system.StatusCode;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,15 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler(EmployeeNotFoundException.class)
+    @ExceptionHandler({EmployeeNotFoundException.class, ManagerNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    Result handleArtifactNotFoundException(EmployeeNotFoundException ex){
+    Result handleEmployeeOrManagerNotFoundException(Exception ex){
+        return new Result(false, StatusCode.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    Result handleObjectNotFoundException(ObjectNotFoundException ex){
         return new Result(false, StatusCode.NOT_FOUND, ex.getMessage());
     }
 

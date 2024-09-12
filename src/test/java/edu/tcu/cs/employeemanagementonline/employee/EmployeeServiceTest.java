@@ -2,6 +2,7 @@ package edu.tcu.cs.employeemanagementonline.employee;
 
 import edu.tcu.cs.employeemanagementonline.employee.utils.IdWorker;
 import edu.tcu.cs.employeemanagementonline.manager.Manager;
+import edu.tcu.cs.employeemanagementonline.system.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,44 +80,44 @@ class EmployeeServiceTest {
         employee.setOwner(manager);
 
         // Given atau diberikan
-        given(employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(employee));
+        given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(employee));
 
         // When
-        Employee returnedEmployee = employeeService.findById("1250808601744904192");
+        Employee returnedEmployee = this.employeeService.findById("1250808601744904192");
 
         // Then
         assertThat(returnedEmployee.getId()).isEqualTo(employee.getId());
         assertThat(returnedEmployee.getDescription()).isEqualTo(employee.getDescription());
         assertThat(returnedEmployee.getImageUrl()).isEqualTo(employee.getImageUrl());
         assertThat(returnedEmployee.getName()).isEqualTo(employee.getName());
-        verify(employeeRepository, times(1)).findById("1250808601744904192");
+        verify(this.employeeRepository, times(1)).findById("1250808601744904192");
     }
 
     @Test
     void testFindByIdNotFound() {
         // Given
-        given(employeeRepository.findById(Mockito.any(String.class))).willReturn(Optional.empty());
+        given(this.employeeRepository.findById(Mockito.any(String.class))).willReturn(Optional.empty());
 
         // When
         Throwable thrown = catchThrowable(() -> {
-            employeeService.findById("1250808601744904192");
+            this.employeeService.findById("1250808601744904192");
         });
 
         // Then
         assertThat(thrown)
-                .isInstanceOf(EmployeeNotFoundException.class)
-                .hasMessage("Could not find artifact with Id 1250808601744904192 :(");
-        verify(employeeRepository, times(1)).findById("1250808601744904192");
+                .isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find employee with Id 1250808601744904192 :(");
+        verify(this.employeeRepository, times(1)).findById("1250808601744904192");
     }
 
     @Test
     void testFindAllSuccess() {
-        given(employeeRepository.findAll()).willReturn(this.employees);
+        given(this.employeeRepository.findAll()).willReturn(this.employees);
 
-        List<Employee> employeeServiceAll = employeeService.findAll();
+        List<Employee> employeeServiceAll = this.employeeService.findAll();
 
         assertThat(employeeServiceAll.size()).isEqualTo(this.employees.size());
-        verify(employeeRepository, times(1)).findAll();
+        verify(this.employeeRepository, times(1)).findAll();
     }
 
 
@@ -129,17 +130,17 @@ class EmployeeServiceTest {
             newEmployee.setImageUrl("ImageUrl...");
 
             given(idWorker.nextId()).willReturn(123456L);
-            given(employeeRepository.save(newEmployee)).willReturn(newEmployee);
+            given(this.employeeRepository.save(newEmployee)).willReturn(newEmployee);
 
             // When
-            Employee savedEmployee = employeeService.save(newEmployee);
+            Employee savedEmployee = this.employeeService.save(newEmployee);
 
             // Then
             assertThat(savedEmployee.getId()).isEqualTo("123456");
             assertThat(savedEmployee.getName()).isEqualTo(newEmployee.getName());
             assertThat(savedEmployee.getDescription()).isEqualTo(newEmployee.getDescription());
             assertThat(savedEmployee.getImageUrl()).isEqualTo(newEmployee.getImageUrl());
-            verify(employeeRepository, times(1)).save(newEmployee);
+            verify(this.employeeRepository, times(1)).save(newEmployee);
         }
 
     @Test
@@ -152,24 +153,25 @@ class EmployeeServiceTest {
         oldEmployee.setImageUrl("ImageUrl");
 
         Employee update = new Employee();
-        update.setId("1250808601744904192");
+//        update.setId("1250808601744904192");
         update.setName("Invisibility Cloak");
         update.setDescription("A new description.");
         update.setImageUrl("ImageUrl");
 
-        given(employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(oldEmployee));
-        //kenapa willReturn(oldEmployee), karena oldEmployee dah jadi (Employee update),
-        // bisa diliat di artifactService.update
-        given(employeeRepository.save(oldEmployee)).willReturn(oldEmployee);
+        given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(oldEmployee));
+        //dibawah ini kenapa .save(oldEmployee) dan .willReturn(oldEmployee)
+        //karena oldEmployee dah jadi (Employee update),
+        // bisa diliat di employeeService.update
+        given(this.employeeRepository.save(oldEmployee)).willReturn(oldEmployee);
 
         // When
-        Employee updatedEmployee = employeeService.update("1250808601744904192", update);
+        Employee updatedEmployee = this.employeeService.update("1250808601744904192", update);
 
         // Then
-        assertThat(updatedEmployee.getId()).isEqualTo(update.getId());
+        assertThat(updatedEmployee.getId()).isEqualTo("1250808601744904192");
         assertThat(updatedEmployee.getDescription()).isEqualTo(update.getDescription());
-        verify(employeeRepository, times(1)).findById("1250808601744904192");
-        verify(employeeRepository, times(1)).save(oldEmployee);
+        verify(this.employeeRepository, times(1)).findById("1250808601744904192");
+        verify(this.employeeRepository, times(1)).save(oldEmployee);
     }
 
     @Test
@@ -180,15 +182,15 @@ class EmployeeServiceTest {
         update.setDescription("A new description.");
         update.setImageUrl("ImageUrl");
 
-        given(employeeRepository.findById("1250808601744904192")).willReturn(Optional.empty());
+        given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.empty());
 
         // When
-        assertThrows(EmployeeNotFoundException.class, () -> {
-            employeeService.update("1250808601744904192", update);
+        assertThrows(ObjectNotFoundException.class, () -> {
+            this.employeeService.update("1250808601744904192", update);
         });
 
         // Then
-        verify(employeeRepository, times(1)).findById("1250808601744904192");
+        verify(this.employeeRepository, times(1)).findById("1250808601744904192");
     }
 
     @Test
@@ -199,24 +201,24 @@ class EmployeeServiceTest {
         employee.setDescription("An invisibility cloak is used to make the wearer invisible.");
         employee.setImageUrl("ImageUrl");
 
-        given(employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(employee));
-        doNothing().when(employeeRepository).deleteById("1250808601744904192");
+        given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(employee));
+        doNothing().when(this.employeeRepository).deleteById("1250808601744904192");
 
-        employeeService.delete("1250808601744904192");
+        this.employeeService.delete("1250808601744904192");
 
-        verify(employeeRepository, times(1)).deleteById("1250808601744904192");
+        verify(this.employeeRepository, times(1)).deleteById("1250808601744904192");
 
     }
 
     @Test
     void testDeleteNotFound(){
-        given(employeeRepository.findById("1250808601744904192")).willReturn(Optional.empty());
+        given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.empty());
 
-        assertThrows(EmployeeNotFoundException.class, () -> {
-            employeeService.delete("1250808601744904192");
+        assertThrows(ObjectNotFoundException.class, () -> {
+            this.employeeService.delete("1250808601744904192");
         });
 
-        verify(employeeRepository, times(1)).findById("1250808601744904192");
+        verify(this.employeeRepository, times(1)).findById("1250808601744904192");
     }
 
 

@@ -1,6 +1,7 @@
 package edu.tcu.cs.employeemanagementonline.employee;
 
 import edu.tcu.cs.employeemanagementonline.employee.utils.IdWorker;
+import edu.tcu.cs.employeemanagementonline.system.exception.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,9 @@ public class EmployeeService {
         this.idWorker = idWorker;
     }
 
-    public Employee findById(String artifactId) {
-        return this.employeeRepository.findById(artifactId)
-                .orElseThrow(()-> new EmployeeNotFoundException(artifactId));
+    public Employee findById(String employeeId) {
+        return this.employeeRepository.findById(employeeId)
+                .orElseThrow(()-> new ObjectNotFoundException("employee", employeeId));
     }
 
     public List<Employee> findAll() {
@@ -33,19 +34,19 @@ public class EmployeeService {
         return this.employeeRepository.save(newEmployee);
     }
 
-    public Employee update(String artifactId, Employee update){
-        return this.employeeRepository.findById(artifactId)
-                .map(oldArtifact -> {
-                    oldArtifact.setName(update.getName());
-                    oldArtifact.setDescription(update.getDescription());
-                    oldArtifact.setImageUrl(update.getImageUrl());
-                    return this.employeeRepository.save(oldArtifact);
-                }).orElseThrow(() -> new EmployeeNotFoundException(artifactId));
+    public Employee update(String employeeId, Employee update){
+        return this.employeeRepository.findById(employeeId)
+                .map(oldEmployee -> {
+                    oldEmployee.setName(update.getName() != null ? update.getName() : oldEmployee.getName());
+                    oldEmployee.setDescription(update.getDescription() != null ? update.getDescription() : oldEmployee.getDescription());
+                    oldEmployee.setImageUrl(update.getImageUrl() != null ? update.getImageUrl() : oldEmployee.getImageUrl());
+                    return this.employeeRepository.save(oldEmployee);
+                }).orElseThrow(() -> new ObjectNotFoundException("employee", employeeId));
     }
 
-    public void delete(String artifactId) {
-        this.employeeRepository.findById(artifactId)
-                .orElseThrow(() -> new EmployeeNotFoundException(artifactId));
-        this.employeeRepository.deleteById(artifactId);
+    public void delete(String employeeId) {
+        this.employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ObjectNotFoundException("employee", employeeId));
+        this.employeeRepository.deleteById(employeeId);
     }
 }

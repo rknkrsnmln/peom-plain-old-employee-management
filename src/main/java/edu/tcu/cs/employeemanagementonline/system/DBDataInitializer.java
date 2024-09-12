@@ -63,19 +63,19 @@ public class DBDataInitializer implements CommandLineRunner {
         Manager w1 = new Manager();
         w1.setId(1);
         w1.setName("Albus Dumbledore");
-        w1.addArtifact(a1);
-        w1.addArtifact(a3);
+        w1.addEmployee(a1);
+        w1.addEmployee(a3);
 
         Manager w2 = new Manager();
         w2.setId(2);
         w2.setName("Harry Potter");
-        w2.addArtifact(a2);
-        w2.addArtifact(a4);
+        w2.addEmployee(a2);
+        w2.addEmployee(a4);
 
         Manager w3 = new Manager();
         w3.setId(3);
         w3.setName("Neville Longbottom");
-        w3.addArtifact(a5);
+        w3.addEmployee(a5);
 
         managerRepository.save(w1);
         managerRepository.save(w2);
