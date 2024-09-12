@@ -3,6 +3,7 @@ package edu.tcu.cs.employeemanagementonline.employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tcu.cs.employeemanagementonline.employee.dto.EmployeeDto;
 import edu.tcu.cs.employeemanagementonline.system.StatusCode;
+import edu.tcu.cs.employeemanagementonline.system.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void tesFindArtifactByIdSuccess() throws Exception {
+    void tesFindEmployeeByIdSuccess() throws Exception {
 
         given(this.employeeService.findById("1250808601744904191"))
                 .willReturn(this.employees.get(0));
@@ -105,15 +106,15 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void tesFindArtifactByIdNotFound() throws Exception {
+    void tesFindEmployeeByIdNotFound() throws Exception {
         // Given
-        given(this.employeeService.findById("1250808601744904191")).willThrow(new EmployeeNotFoundException("1250808601744904191"));
+        given(this.employeeService.findById("1250808601744904191")).willThrow(new ObjectNotFoundException("employee", "1250808601744904191"));
 
         // When and then
         this.mockMvc.perform(get("/api/v1/employees/1250808601744904191").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find artifact with Id 1250808601744904191 :("))
+                .andExpect(jsonPath("$.message").value("Could not find employee with Id 1250808601744904191 :("))
                 .andExpect(jsonPath("$.data").isEmpty());
 
     }
@@ -167,18 +168,19 @@ class EmployeeControllerTest {
     @Test
     void testUpdateArtifactSuccess() throws Exception {
         // Given
-        EmployeeDto employeeDto = new EmployeeDto("1250808601744904192",
-                "Invisibility Cloak",
-                "A new description.",
-                "ImageUrl",
-                null);
-        String json = this.objectMapper.writeValueAsString(employeeDto);
+//        EmployeeDto employeeDto = new EmployeeDto("1250808601744904192",
+//                "Invisibility Cloak",
+//                "A new description.",
+//                "ImageUrl",
+//                null);
+//        String json = this.objectMapper.writeValueAsString(employeeDto);
 
         Employee updatedEmployee = new Employee();
         updatedEmployee.setId("1250808601744904192");
         updatedEmployee.setName("Invisibility Cloak");
         updatedEmployee.setDescription("A new description.");
         updatedEmployee.setImageUrl("ImageUrl");
+        String json = this.objectMapper.writeValueAsString(updatedEmployee);
 
         given(this.employeeService.update(eq("1250808601744904192"), any(Employee.class))).willReturn(updatedEmployee);
 
@@ -203,13 +205,13 @@ class EmployeeControllerTest {
                 null);
         String json = this.objectMapper.writeValueAsString(employeeDto);
 
-        given(this.employeeService.update(eq("1250808601744904192"), any(Employee.class))).willThrow(new EmployeeNotFoundException("1250808601744904192"));
+        given(this.employeeService.update(eq("1250808601744904192"), any(Employee.class))).willThrow(new ObjectNotFoundException("employee", "1250808601744904192"));
 
         // When and then
         this.mockMvc.perform(put("/api/v1/employees/1250808601744904192").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find artifact with Id 1250808601744904192 :("))
+                .andExpect(jsonPath("$.message").value("Could not find employee with Id 1250808601744904192 :("))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -229,13 +231,13 @@ class EmployeeControllerTest {
     @Test
     void testDeleteArtifactErrorWithNonExistentId() throws Exception {
         // Given
-        doThrow(new EmployeeNotFoundException("1250808601744904191")).when(this.employeeService).delete("1250808601744904191");
+        doThrow(new ObjectNotFoundException("employee","1250808601744904191")).when(this.employeeService).delete("1250808601744904191");
 
         // When and then
         this.mockMvc.perform(delete("/api/v1/employees/1250808601744904191").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find artifact with Id 1250808601744904191 :("))
+                .andExpect(jsonPath("$.message").value("Could not find employee with Id 1250808601744904191 :("))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 

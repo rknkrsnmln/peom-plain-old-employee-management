@@ -6,13 +6,12 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ManagerToManagerDto implements Converter<Manager, ManagerDto> {
-
+public class ManagerDtoToManager implements Converter<ManagerDto, Manager> {
     @Override
-    public ManagerDto convert(Manager source) {
-
-        return new ManagerDto(source.getId(),
-                                source.getName(),
-                                source.getNumberOfEmployees());
+    public Manager convert(ManagerDto source) {
+        Manager manager = new Manager();
+        manager.setId(source.id());
+        manager.setName(source.name());
+        return manager;
     }
 }
