@@ -68,9 +68,9 @@ public class ManagerController {
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
 
-    @PutMapping("/{managerId}/artifacts/{employeeId}")
-    public Result assignArtifact(@PathVariable Integer managerId, @PathVariable String employeeId) {
+    @PutMapping("/{managerId}/employees/{employeeId}")
+    public Result assignEmployee(@PathVariable Integer managerId, @PathVariable String employeeId) {
         this.managerService.assignEmployee(managerId, employeeId);
-        return new Result(true, StatusCode.SUCCESS, "Artifact Assignment Success");
+        return new Result(true, StatusCode.SUCCESS, "Employee Assignment Success");
     }
 }

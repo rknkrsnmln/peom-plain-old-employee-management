@@ -54,16 +54,18 @@ public class ManagerService {
     }
 
     public void assignEmployee(Integer managerId, String employeeId) {
-    // Find this artifact by Id from DB.
+        // Find this Employee by ID from DB.
         Employee employeeToBeAssigned = this.employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ObjectNotFoundException("manager", employeeId));
+                .orElseThrow(() -> new ObjectNotFoundException("employee", employeeId));
 
-        // Find this wizard by Id fromm DB.
+        // Find this manager by ID fromm DB.
         Manager manager = this.managerRepository.findById(managerId)
-                .orElseThrow(() -> new ObjectNotFoundException("employee", managerId));
+                .orElseThrow(() -> new ObjectNotFoundException("manager", managerId));
 
         // Artifact assignment
-        // We need to see if the artifact is already owned by some wizard.
+        // We need to see if the employee is already employed by some manager.
+        // Kenapa tidak langsung dari employee dan melalui manager dulu
+        // Karena Bi-directional alias mesti dihapus dari manager dan employee
         if (employeeToBeAssigned.getOwner() != null) {
             employeeToBeAssigned.getOwner().removeEmployee(employeeToBeAssigned);
         }

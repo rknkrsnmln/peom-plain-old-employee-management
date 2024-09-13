@@ -237,4 +237,43 @@ class ManagerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
     }
 
+    @Test
+    void testAssignEmployeeSuccess() throws Exception {
+        // Given
+        Mockito.doNothing().when(this.managerService).assignEmployee(2, "1250808601744904191");
+
+        // When and then
+        this.mockMvc.perform(MockMvcRequestBuilders.put(this.baseUrl + "/managers/2/employees/1250808601744904191").accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.flag").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Employee Assignment Success"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+    }
+
+    @Test
+    void testAssignEmployeeErrorWithNonExistentManagerId() throws Exception {
+        // Given
+        Mockito.doThrow(new ObjectNotFoundException("manager", 5)).when(this.managerService).assignEmployee(5, "1250808601744904191");
+
+        // When and then
+        this.mockMvc.perform(MockMvcRequestBuilders.put(this.baseUrl + "/managers/5/employees/1250808601744904191").accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.flag").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Could not find manager with Id 5 :("))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+    }
+
+    @Test
+    void testAssignEmployeeErrorWithNonExistentEmployeeId() throws Exception {
+        // Given
+        Mockito.doThrow(new ObjectNotFoundException("employee", "1250808601744904199")).when(this.managerService).assignEmployee(2, "1250808601744904199");
+
+        // When and then
+        this.mockMvc.perform(MockMvcRequestBuilders.put(this.baseUrl + "/managers/2/employees/1250808601744904199").accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.flag").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Could not find employee with Id 1250808601744904199 :("))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+    }
+
 }
