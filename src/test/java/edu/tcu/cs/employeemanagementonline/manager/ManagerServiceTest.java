@@ -1,5 +1,7 @@
 package edu.tcu.cs.employeemanagementonline.manager;
 
+import edu.tcu.cs.employeemanagementonline.employee.Employee;
+import edu.tcu.cs.employeemanagementonline.employee.EmployeeRepository;
 import edu.tcu.cs.employeemanagementonline.system.exception.ObjectNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -17,12 +19,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ManagerServiceTest {
 
     @Mock
     ManagerRepository managerRepository;
+
+    @Mock
+    EmployeeRepository employeeRepository;
 
     @InjectMocks
     ManagerService managerService;
@@ -180,7 +186,7 @@ class ManagerServiceTest {
 
     @Test
     void testDeleteNotFound() {
-// Given
+        // Given
         BDDMockito.given(this.managerRepository.findById(1)).willReturn(Optional.empty());
 
         // When
@@ -190,5 +196,87 @@ class ManagerServiceTest {
 
         // Then
         Mockito.verify(this.managerRepository, Mockito.times(1)).findById(1);
+    }
+
+    @Test
+    void testAssignEmployeeSuccess() {
+        // Given
+        Employee e = new Employee();
+        e.setId("1250808601744904192");
+        e.setName("Invisibility Cloak");
+        e.setDescription("An invisibility cloak is used to make the wearer invisible.");
+        e.setImageUrl("ImageUrl");
+
+        Manager m2 = new Manager();
+        m2.setId(2);
+        m2.setName("Harry Potter");
+        m2.addEmployee(e);
+
+        Manager m3 = new Manager();
+        m3.setId(3);
+        m3.setName("Neville Longbottom");
+
+        BDDMockito.given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(e));
+        BDDMockito.given(this.managerRepository.findById(3)).willReturn(Optional.of(m3));
+
+        // When
+        this.managerService.assignEmployee(3,"1250808601744904192");
+
+        // Then
+        Assertions.assertThat(e.getOwner().getId()).isEqualTo(m3.getId());
+        Assertions.assertThat(m3.getEmployees()).contains(e);
+    }
+
+    @Test
+    void testAssignEmployeeErrorWithNonExistentManagerId() {
+        // Given
+        Employee e = new Employee();
+        e.setId("1250808601744904192");
+        e.setName("Invisibility Cloak");
+        e.setDescription("An invisibility cloak is used to make the wearer invisible.");
+        e.setImageUrl("ImageUrl");
+
+        Manager m2 = new Manager();
+        m2.setId(2);
+        m2.setName("Harry Potter");
+        m2.addEmployee(e);
+
+
+        BDDMockito.given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.of(e));
+        BDDMockito.given(this.managerRepository.findById(3)).willReturn(Optional.empty());
+
+        // When
+        Throwable thrown = assertThrows(ObjectNotFoundException.class, () -> {
+           this.managerService.assignEmployee(3, "1250808601744904192");
+        });
+
+        // Then
+        Assertions.assertThat(thrown)
+                .isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find manager with Id 3 :(");
+        Assertions.assertThat(e.getOwner().getId()).isEqualTo(m2.getId());
+    }
+
+    @Test
+    void testAssignEmployeeErrorWithNonExistentEmployeeId() {
+        // Given
+//        Manager m3 = new Manager();
+//        m3.setId(3);
+//        m3.setName("Neville Longbottom");
+
+        BDDMockito.given(this.employeeRepository.findById("1250808601744904192")).willReturn(Optional.empty());
+//        gak penting akan error
+//        BDDMockito.given(this.managerRepository.findById(3)).willReturn(Optional.of(m3));
+
+        // When
+        Throwable thrown = assertThrows(ObjectNotFoundException.class, () -> {
+            this.managerService.assignEmployee(3, "1250808601744904192");
+        });
+
+        // Then
+        Assertions.assertThat(thrown)
+                .isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find employee with Id 1250808601744904192 :(");
+        Mockito.verify(this.employeeRepository,  times(1)).findById("1250808601744904192");
     }
 }
